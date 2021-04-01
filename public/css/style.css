@@ -1,0 +1,61 @@
+h1{
+	color: navy;
+	text-align: center;
+}
+body{
+	text-align: center;
+	background-color: DarkCyan;
+}
+section.obj{
+	width: 100%;
+	clear: both;
+}
+section.checkbox{
+	width: 50px;
+	border-radius: 5%;
+	float: left;
+}
+section.item, section.time, section.del{
+	color: White;
+	font-family: Monospace;
+	background-color: DarkBlue;
+	width: 20%;
+	border: 1px solid black;
+	border-radius: 5%;
+	float: left;
+} 
+section.del{
+	background-color: DarkRed;
+	border-radius: 5%;
+	height:16px;
+	width: 16px;
+}
+div.a{
+	background-color: White;
+	height: 3px;
+	widht: 15px;
+	transform: rotate(45deg);
+	border-radius: 20%;
+	margin-top: 6px;
+}
+div.b{
+	background-color: White;
+	height: 3px;
+	widht: 15px;
+	transform: rotate(90deg);
+	border-radius: 20%;
+}
+section.sep{
+	width: 10px;
+	float: left;
+}
+@media screen and (max-width: 600px){
+	section.obj,{
+		width: 100%;
+	}
+}
+form{
+	margin-left: 10%;
+	float: left;
+	clear: both;
+}
