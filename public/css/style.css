@@ -6,6 +6,10 @@ body{
 	text-align: left;
 	background-color: DarkCyan;
 }
+ul{
+	text-align: left;
+	list-style-type: none;
+}
 @media screen and (max-width: 600px){
 	section.obj,{
 		width: 100%;
