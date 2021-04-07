@@ -1,41 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/style.css" type="text/css">
-    <title>Todo List</title>
-  </head>
-  <body>
-    <h1>Todo List</h1>
-      <% for(let i=0; i<todos.length; i++){ %>
-        <section class="obj">
-        <section class="checkbox"><input type="checkbox"></section>
-    <section class="item"><%= todos[i].time %></section>
-    <section class="sep"></section>
-    <section class="time"><%= todos[i].item %></section>
-    <section class="del"><div class="a"><div class="b"></div></div></section> 
-        </section>
-      <%} %>
-
-
-<form>
-  <input type="text" id="time" name="time"><br>
-  <label for="item">Todo Item:</label><br>
-  <input type="text" id="item" name="item">
-</form>
-
-<!-- 
-    <ul >
-      <% for(let i=0; i<todos.length; i++){ %>
-      <li class="todoItemList">
-        <input type="checkbox">
-        <span><%= todos[i].time %></span>
-        <span><%= todos[i].item %></span>
-        <span class="del">Delete</span>
-      </li>
-      <%} %>
-    </ul>
-    -->
-  </body>
-</html>
+<!DOCTYPE html> <html lang="en">
+	<head>
+		<link rel="stylesheet" href="/css/style.css" type="text/css">
+		<title>Todo</title>
+	</head>
+	<body>
+		<h1>TODOs</h1>
+		<ul>
+			<% for(let i=0; i<list.length; i++){ %>
+				<li>
+					<input id='a' type="checkbox">
+					<span id='b'><%= list[i].item %></span>
+					<!-- <span 'id='c'><form class="dd" action="/del" method="POST"><button type="submit" name=<%= i %>>Delete</button></form></span> -->
+					<span class="del">Delete</span>
+				</li>
+			<% } %>
+		</ul>
+		<form class="add" action="/addItem" method="POST">
+			<input class="item" type="text" placeholder="Add todo item" name="item">
+			<button type="submit">Submit</button> 
+		</form>
+		<script src="/main.js"></script>
+	</body>

@@ -1,70 +1,78 @@
 const express = require('express')
 const ejs = require('ejs')
-//const mongoose = require('mongoose')
-const app = express()
-const PORT = 8000
 
+///////////////// Connection to MongoDB Atlas ///////////////////////
+const MongoClient = require('mongodb').MongoClient
+let db,
+    dbConnectionStr = 'mongodb://todoUser:todo9@cluster0-shard-00-00.9diaa.mongodb.net:27017,cluster0-shard-00-01.9diaa.mongodb.net:27017,cluster0-shard-00-02.9diaa.mongodb.net:27017/test?ssl=true&replicaSet=atlas-fvicdi-shard-0&authSource=admin&retryWrites=true&w=majority',
+    dbName = 'todo'
+
+MongoClient.connect(dbConnectionStr, {useUnifiedTopology: true})
+    .then(client => {
+        console.log(`Connected to ${dbName} Database`)
+        db = client.db(dbName)
+    })
+    .catch(err => {
+        console.log(err)
+    })
+////////////////////////////////////////////////////////////////////
+
+var app = express()
+const PORT = 8000
 
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.urlencoded({extended: true}))
 app.use(express.json())
 
+
 app.get('/', (req, res) => {
-  res.render('index', {todos})
+	db.collection('todo').find().toArray()
+		.then(list => {
+			res.render('index', {list})
+		})
+		.catch(err => {
+			console.log(err)
+		})
 })
 
-//app.get('/', (req, res) => {
-//  db.collection("todo").find().toArray()
-//    .then(data => {
-//      res.render('index', {data: list})
-//    })
-//    .catch(err => console.log(err)) 
-//})
-
-app.listen(process.env.PORT || PORT, () => {
-	console.log(`Todoapp listening at http://localhost:${PORT}`)
+app.post('/addItem', (req, res, next) => {
+	db.collection('todo').insertOne(req.body)
+		.then(result => {
+			res.redirect('/')
+		})
+		.catch(err => console.error(err))
 })
 
+app.post('/del', (req, res, next) =>{
+	db.collection('todo').find().toArray()
+		.then(arr => {
+			for(const i in req.body){
+				db.collection('todo').deleteOne(arr[i])
+					.then(result => res.redirect('/'))
+					.catch(err => console.error(err))
+			}
+		}).catch(err => console.error(err))
+})
+
+app.delete('/deleteTodo', (req, res) => {
+	console.log(req.body)
+	db.collection('todo').deleteOne({item: req.body.item})
+		.then(result => {
+			console.log('Item Deleted')
+			res.json('Item Deleted')
+		})
+		.catch(err => console.error(err))
+})
+
+app.listen(PORT)
 
 
-//const MongoClient = require('mongodb').MongoClient;
-//let dbName = "todo";
-//const uri = "mongodb+srv://todoUser:Krbezlija9@cluster0.9diaa.mongodb.net/todo?retryWrites=true&w=majority";
-//MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-//var db = async () => {client.connect(err => {
-//  //const db = client.db("todo")
-//  const collection = client.db("todo").collection("todos");
-//  // perform actions on the collection object
-//  client.close();
-//});
-//}
-
-//let dbConnectionStr = 'mongodb+srv://todoUser:Krbezlija9@cluster0.9diaa.mongodb.net/todo?retryWrites=true&w=majority';
-
-//const db = async() => {
- // await mongoose.connect(dbConnectionStr)
-//}
-//mongoose.connect(dbConnectionStr, {useNewUrlParser: true, useUnifiedTopology: true})
-//mongoose.connect(dbConnectionStr)
-  //.then(() => console.log("Mongodb connected..."))
-
-
-var MongoClient = require('mongodb').MongoClient;
-var uri = "mongodb+srv://mirzaTodo:mirza9@todocluster.ysv0g.mongodb.net/todoList?retryWrites=true&w=majority"
-MongoClient.connect(uri, { useUnifiedTopology: true })
-  .then( (client) => {
-  const collection = client.db("todoList").collection("todos");
-  //console.log(collection.find().toArray())
-
-  // perform actions on the collection object
-  client.close();
-  })
-  .catch(err => console.log(err))
-
-let todos = [
-  {time:'12AM',
-    item: 'Pisi zadacu'},
-  {time: '13AM',
-    item:'Odmori'}
+var list = [{
+	item: "Push the app to Git",
+	date: "04/04 23:59"
+	},{
+	item: "Finish the app",
+	date: ""
+	},
 ]
